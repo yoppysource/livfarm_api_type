@@ -1,0 +1,17 @@
+extends base-email
+
+block content
+    p 안녕하세요 고객님,
+    p 리브팜에 가입해주셔서 감사드립니다.
+    p 저희 농장에 방문하시기 앞서, 아래 버튼을 클릭하여 이메일 주소를 인증해주세요.
+    p 20분 내에 인증 바랍니다.
+    table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+        tbody
+            tr
+                td(align='center')
+                    table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+                        tbody
+                            tr
+                                td
+                                    a(href=`${url}`, target='_blank') 이메일 인증하기
+    
