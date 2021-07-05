@@ -43,9 +43,11 @@ const socialLogin = async (req: Request, res: Response, next: NextFunction) => {
       return sendToken(user, 200, res);
     }
     //이메일은 동일한데 다른 소셜로 가입한 경우
-    const existedUser = await User.findOne({ email });
-    if (existedUser) {
-      return next(new AppError(`${existedUser.platform ? existedUser.platform : '리브팜'}에서 이미 해당 이메일로 가입된 계정이 있습니다`, 400));
+    if (email !== null) {
+      const existedUser = await User.findOne({ email });
+      if (existedUser) {
+        return next(new AppError(`${existedUser.platform ? existedUser.platform : '리브팜'}에서 이미 해당 이메일로 가입된 계정이 있습니다`, 400));
+      }
     }
     //SignUp for social login
     req.body.role = 'user';
