@@ -79,7 +79,7 @@ const importData = async () => {
 
     const productArray = await Product.find({});
     for (let product of productArray) {
-      console.log(product.id);
+      console.log(store2.id);
       await Inventory.create(
         Inventory.build({
           store: store1.id,
