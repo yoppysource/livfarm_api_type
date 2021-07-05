@@ -79,6 +79,7 @@ const userSchema = new mongoose.Schema<UserDoc>(
       //transfer email to lower case
       lowercase: true,
       unique: true,
+      sparse: true,
     },
     isEmailConfirmed: {
       type: Boolean,
