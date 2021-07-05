@@ -78,6 +78,7 @@ const userSchema = new mongoose.Schema<UserDoc>(
       type: String,
       //transfer email to lower case
       lowercase: true,
+      index: true,
       unique: true,
       sparse: true,
     },
