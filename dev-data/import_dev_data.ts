@@ -39,6 +39,8 @@ const deleteData = async () => {
   try {
     await Product.deleteMany();
     await User.deleteMany();
+    await User.deleteMany();
+    await Inventory.deleteMany();
     await Order.deleteMany();
     await Cart.deleteMany();
     await Review.deleteMany();
@@ -77,6 +79,7 @@ const importData = async () => {
 
     const productArray = await Product.find({});
     for (let product of productArray) {
+      console.log(product.id);
       await Inventory.create(
         Inventory.build({
           store: store1.id,

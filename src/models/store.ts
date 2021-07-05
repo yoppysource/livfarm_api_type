@@ -88,6 +88,7 @@ storeSchema.virtual('inventories', {
   ref: 'Inventory',
   localField: '_id',
   foreignField: 'store',
+  options: { sort: { isOnShelf: -1, rank: 1 } },
 });
 
 storeSchema.statics.build = (attrs: StoreAttrs) => {

@@ -76,7 +76,8 @@ const updateInventory = async (cartID: string) => {
     if (inventory) {
       let newInventory = inventory!.inventory - item.quantity;
       if (newInventory < 0) newInventory = 0;
-      await Inventory.findByIdAndUpdate(inventory.id, { inventory: newInventory });
+      inventory.set({ inventory: newInventory });
+      await inventory.save();
     } else {
       throw new AppError('존재하지 않는 상품입니다.', 401);
     }

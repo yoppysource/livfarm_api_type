@@ -57,9 +57,7 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
       let store;
       const allStores = await Store.find({});
       store = allStores[0];
-      await store
-        .populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } }, options: { sort: { isOnShelf: -1, rank: 1 } } })
-        .execPopulate();
+      await store.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
 
       if (req.user) {
         if (!req.user.cart.store) {
@@ -97,9 +95,7 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
       store = allStores[0];
     }
 
-    await store
-      .populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } }, options: { sort: { isOnShelf: -1, rank: 1 } } })
-      .execPopulate();
+    await store.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
 
     if (req.user) {
       if (!req.user.cart.store) {
