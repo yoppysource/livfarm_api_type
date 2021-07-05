@@ -1,3 +1,4 @@
+import { NextFunction } from 'express';
 import mongoose, { Query, Types } from 'mongoose';
 import { Product, ProductDoc } from './product';
 
@@ -82,12 +83,13 @@ inventorySchema.pre<Query<InventoryDoc, InventoryDoc>>(/^find/, function (this: 
   }).sort('-isOnShelf rank');
   next();
 });
-inventorySchema.pre('save', function (this: InventoryDoc) {
+inventorySchema.pre('save', function (this: InventoryDoc, next: Function) {
   if (!this.inventory || this.inventory <= 0) {
     this.isOnShelf = false;
   } else {
     this.isOnShelf = true;
   }
+  next();
 });
 // //Update isOnShelf
 // inventorySchema.post(/^update/i, async (document: InventoryDoc) => {
