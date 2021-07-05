@@ -89,17 +89,17 @@ inventorySchema.pre('save', function (this: InventoryDoc) {
     this.isOnShelf = true;
   }
 });
-//Update isOnShelf
-inventorySchema.post(/^update/i, async (document: InventoryDoc) => {
-  if (document) {
-    if (!document.inventory || document.inventory <= 0) {
-      document.isOnShelf = false;
-    } else {
-      document.isOnShelf = true;
-    }
-    await document.save();
-  }
-});
+// //Update isOnShelf
+// inventorySchema.post(/^update/i, async (document: InventoryDoc) => {
+//   if (document) {
+//     if (!document.inventory || document.inventory <= 0) {
+//       document.isOnShelf = false;
+//     } else {
+//       document.isOnShelf = true;
+//     }
+//     await document.save();
+//   }
+// });
 
 inventorySchema.statics.build = (attrs: InventoryAttrs) => {
   return new Inventory(attrs);
