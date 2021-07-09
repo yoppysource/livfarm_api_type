@@ -25,6 +25,7 @@ import { OrderPath } from './src/routes/order/order-routes-path';
 import { orderRouter } from './src/routes/order/order-routes';
 import { AppInfoPath } from './src/routes/appInfo/appInfo-routes-path';
 import { appInfoRouter } from './src/routes/appInfo/appInfo-routes';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
@@ -63,12 +64,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // //Allow Cross-Origin Resource Sharing
 // //TODO: For depolying it should be managed with whitelist
 // // if (process.env.NODE_ENV === "development")
-// app.use(
-//   cors({
-//     origin: true,
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 
 // //Prevent malicious query injection
 // app.use(express.urlencoded({ extended: true, limit: '10kb' }));

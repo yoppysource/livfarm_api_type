@@ -11,11 +11,11 @@ it('get a store for user/non-user', async () => {
   console.log(res.body.data.data);
 });
 
-it('get all stores for admin', async () => {
-  await request(app).get(StorePath.withBase(StorePath.ALL)).expect(401);
+// it('get all stores for admin', async () => {
+//   await request(app).get(StorePath.withBase(StorePath.ALL)).expect(401);
 
-  const adminToken = await global.getAdminToken();
-  const res = await request(app).get(StorePath.withBase(StorePath.ALL)).set('authorization', `Bearer ${adminToken}`).expect(200);
+//   const adminToken = await global.getAdminToken();
+//   const res = await request(app).get(StorePath.withBase(StorePath.ALL)).set('authorization', `Bearer ${adminToken}`).expect(200);
 
-  expect(res.body.length).toEqual(2);
-});
+//   expect(res.body.length).toEqual(2);
+// });

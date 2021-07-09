@@ -20,6 +20,7 @@ interface OrderDoc extends mongoose.Document {
   user: UserDoc;
   createdAt: Date;
   cart: CartDoc;
+  storeId: mongoose.Types.ObjectId;
 }
 const orderSchema = new mongoose.Schema(
   {
@@ -28,6 +29,10 @@ const orderSchema = new mongoose.Schema(
     usedPoint: {
       type: Number,
       default: 0,
+    },
+    storeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Store',
     },
     address: {
       type: {
@@ -125,6 +130,7 @@ orderSchema.virtual('orderStatus').get(function (this: OrderDoc) {
 });
 
 orderSchema.index({ cart: 1, user: 1 });
+orderSchema.index({ storeId: 1 });
 orderSchema.pre(/^find/, function (next) {
   this.populate({ path: 'cart' }).populate({
     path: 'user',

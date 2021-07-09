@@ -61,9 +61,9 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
 
       if (req.user) {
         if (!req.user.cart.store) {
-          await Cart.findByIdAndUpdate(req.user.cart._id, { store: store._id, $pull: { items: {} } });
+          await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
         } else {
-          if (req.user.cart.store.toString() !== store._id.toString()) {
+          if (req.user.cart.storeId.toString() !== store._id.toString()) {
             await Cart.findByIdAndUpdate(req.user.cart._id, { store: store._id, $pull: { items: {} } });
           }
         }
@@ -99,10 +99,10 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
 
     if (req.user) {
       if (!req.user.cart.store) {
-        await Cart.findByIdAndUpdate(req.user.cart._id, { store: store._id, $pull: { items: {} } });
+        await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
       } else {
-        if (req.user.cart.store.toString() !== store._id.toString()) {
-          await Cart.findByIdAndUpdate(req.user.cart._id, { store: store._id, $pull: { items: {} } });
+        if (req.user.cart.storeId.toString() !== store._id.toString()) {
+          await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
         }
       }
     }

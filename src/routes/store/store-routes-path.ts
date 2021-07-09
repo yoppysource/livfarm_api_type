@@ -11,15 +11,12 @@ import { getStoreAndAddressFromLocation } from './store-controller';
 import { setCurrentUser } from '../../middlewares/set_current_user';
 
 const router = express.Router();
-
+router.route(StorePath.ALL).get(asyncWrapper(SharedController.getAll<StoreDoc>(Store)));
 router.route(StorePath.ID).get(asyncWrapper(SharedController.getOne<StoreDoc>(Store)));
 router.route(StorePath.FROM_LOCATION).post(setCurrentUser, asyncWrapper(getStoreAndAddressFromLocation));
 router.use(verifyToken, restrictToAdmin);
 
-router
-  .route(StorePath.ALL)
-  .get(asyncWrapper(SharedController.getAll<StoreDoc>(Store)))
-  .post(asyncWrapper(SharedController.createOne<StoreDoc>(Store)));
+router.route(StorePath.ALL).post(asyncWrapper(SharedController.createOne<StoreDoc>(Store)));
 router
   .route(StorePath.ID)
   .patch(asyncWrapper(SharedController.updateOne<StoreDoc>(Store)))

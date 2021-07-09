@@ -13,11 +13,11 @@ const updateMyCart = async (req: Request, res: Response, next: NextFunction) => 
   }
   //store가 변할 경우
   if (req.body.store) {
-    if (req.body.store !== cart.store) {
+    if (req.body.store !== cart.storeId) {
       cart.items = [];
-      cart.store = req.body.store;
+      cart.storeId = req.body.store;
     } else {
-      cart.store = req.body.store;
+      cart.storeId = req.body.store;
     }
     await cart.save();
   }

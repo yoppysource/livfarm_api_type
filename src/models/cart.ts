@@ -18,7 +18,7 @@ import { Product } from './product';
 interface CartDoc extends mongoose.Document {
   getTotalPrice: number;
   getTotalDiscountedPrice: number;
-  store: string;
+  storeId: mongoose.Types.ObjectId;
   items: Item[];
 }
 
@@ -29,7 +29,7 @@ interface Item {
 
 const cartSchema = new mongoose.Schema<CartDoc>(
   {
-    store: {
+    storeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Store',
     },
