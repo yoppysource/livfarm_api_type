@@ -98,7 +98,7 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
     await store.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
 
     if (req.user) {
-      if (!req.user.cart.store) {
+      if (!req.user.cart.storeId) {
         await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
       } else {
         if (req.user.cart.storeId.toString() !== store._id.toString()) {
