@@ -48,7 +48,15 @@ exports.sendAlimtalk = async (req, res) => {
       □ 방문예정시각 : ${req.data.customData.bookingOrderMessage}
       □ 결제금액 : ${req.data.amount}원`,
       recvname: '리브팜',
-      // button: 버튼 정보 // JSON string,
+      receiver_3: process.env.ADMIN2_PHONE_NUMBER,
+      subject_3: '주문알림',
+      message_3: `[LivFarm] 주문완료안내
+      안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 예정시간에 맞춰 정성스럽게 준비해 두겠습니다.
+      □ 주문명 : ${req.data.name}
+      □ 매장주소 : ${req.data.customData.storeAddress}
+      □ 방문예정시각 : ${req.data.customData.bookingOrderMessage}
+      □ 결제금액 : ${req.data.amount}원`,
+      recvname: '리브팜',
       failover: 'Y', // Y or N
       fsubject_1: '주문알림문자',
       fmessage_1: `[LivFarm] 주문완료안내
@@ -59,6 +67,13 @@ exports.sendAlimtalk = async (req, res) => {
       □ 결제금액 : ${req.data.amount}원`,
       fsubject_2: '주문알림문자',
       fmessage_2: `[LivFarm] 주문완료안내
+      안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 예정시간에 맞춰 정성스럽게 준비해 두겠습니다.
+      □ 주문명 : ${req.data.name}
+      □ 매장주소 : ${req.data.customData.storeAddress}
+      □ 방문예정시각 : ${req.data.customData.bookingOrderMessage}
+      □ 결제금액 : ${req.data.amount}원`,
+      fsubject_3: '주문알림문자',
+      fmessage_3: `[LivFarm] 주문완료안내
       안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 예정시간에 맞춰 정성스럽게 준비해 두겠습니다.
       □ 주문명 : ${req.data.name}
       □ 매장주소 : ${req.data.customData.storeAddress}
@@ -88,6 +103,15 @@ exports.sendAlimtalk = async (req, res) => {
       □ 배송예정일 : ${req.data.customData.bookingOrderMessage}
       □ 결제금액 : ${req.data.amount}원`,
       recvname: '리브팜',
+      receiver_3: process.env.ADMIN2_PHONE_NUMBER,
+      subject_3: '주문알림',
+      message_3: `[LivFarm] 주문완료안내
+      안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 배송 예정시간에 맞게 갓 수확한 채소를 신선하게 보내드리겠습니다.
+      □ 주문명 : ${req.data.name}
+      □ 배송지 : ${req.data.buyer_addr}
+      □ 배송예정일 : ${req.data.customData.bookingOrderMessage}
+      □ 결제금액 : ${req.data.amount}원`,
+      recvname: '리브팜',
       // button: 버튼 정보 // JSON string,
       failover: 'Y', // Y or N
       fsubject_1: '주문알림문자',
@@ -99,6 +123,13 @@ exports.sendAlimtalk = async (req, res) => {
       □ 결제금액 : ${req.data.amount}원`,
       fsubject_2: '주문알림문자',
       fmessage_2: `[LivFarm] 주문완료안내
+      안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 배송 예정시간에 맞게 갓 수확한 채소를 신선하게 보내드리겠습니다.
+      □ 주문명 : ${req.data.name}
+      □ 배송지 : ${req.data.buyer_addr}
+      □ 배송예정일 : ${req.data.customData.bookingOrderMessage}
+      □ 결제금액 : ${req.data.amount}원`,
+      fsubject_3: '주문알림문자',
+      fmessage_3: `[LivFarm] 주문완료안내
       안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 배송 예정시간에 맞게 갓 수확한 채소를 신선하게 보내드리겠습니다.
       □ 주문명 : ${req.data.name}
       □ 배송지 : ${req.data.buyer_addr}
