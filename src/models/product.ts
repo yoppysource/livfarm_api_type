@@ -44,13 +44,15 @@ const productSchema = new mongoose.Schema<ProductDoc>(
     },
     slug: String,
     price: Number,
-
+    partnerPrice: {
+      type: Number,
+      default: 3000,
+    },
     discountedPrice: {
       type: Number,
     },
     location: String,
     description: String,
-
     thumbnailPath: String,
     descriptionImgPath: String,
     detailImgPath: [String],

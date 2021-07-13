@@ -8,7 +8,7 @@ interface UserBaseDoc extends mongoose.Document {
   _id: string;
   email: string;
   isEmailConfirmed: boolean;
-  role: 'user' | 'admin';
+  role: 'user' | 'partner' | 'admin';
   password?: string;
   agreeToGetMail: boolean;
   passwordChangedAt?: any;
@@ -90,7 +90,7 @@ const userSchema = new mongoose.Schema<UserDoc>(
 
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'partner', 'admin'],
       default: 'user',
     },
     password: {
