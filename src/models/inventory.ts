@@ -91,17 +91,19 @@ inventorySchema.pre('save', function (this: InventoryDoc, next: Function) {
   }
   next();
 });
-// //Update isOnShelf
-// inventorySchema.post(/^update/i, async (document: InventoryDoc) => {
-//   if (document) {
-//     if (!document.inventory || document.inventory <= 0) {
-//       document.isOnShelf = false;
-//     } else {
-//       document.isOnShelf = true;
-//     }
-//     await document.save();
-//   }
-// });
+//Update isOnShelf
+inventorySchema.post(/Update/, async function (doc) {
+  console.log('updatedCalled!!');
+  console.log(doc.inventory);
+  if (doc) {
+    if (!doc.inventory || doc.inventory <= 0) {
+      doc.isOnShelf = false;
+    } else {
+      doc.isOnShelf = true;
+    }
+  }
+  doc.save();
+});
 
 inventorySchema.statics.build = (attrs: InventoryAttrs) => {
   return new Inventory(attrs);

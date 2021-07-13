@@ -7,9 +7,10 @@ import { Product, ProductDoc } from '../../models/product';
 import { Review, ReviewDoc } from '../../models/review';
 import { verifyToken } from '../../middlewares/verify-token';
 import { restrictToAdmin } from '../../middlewares/restrict-to-admin';
+import { getInventoriesBasedOnStoreId } from './inventory-controller';
 
 const router = express.Router();
-router.get(InventoryPath.STORE_ID, asyncWrapper(SharedController.getAll<InventoryDoc>(Inventory)));
+router.get(InventoryPath.STORE_ID, asyncWrapper(getInventoriesBasedOnStoreId));
 router.get(
   InventoryPath.ID,
   asyncWrapper(
