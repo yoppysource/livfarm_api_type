@@ -79,7 +79,6 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
             type: 'Point',
             coordinates: [coordinates[0], coordinates[1]],
           },
-
           $maxDistance: 10000,
         },
       },
@@ -106,6 +105,8 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
         }
       }
     }
+
+    if (req.user && req.user.role === 'partner') isPossibleToBuy = true;
 
     res.status(200).json({ status: 'success', address, zoneCode, coordinates, isPossibleToBuy, data: { data: store } });
   } catch (error) {
