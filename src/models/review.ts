@@ -104,6 +104,11 @@ reviewSchema.statics.calcAverageRatings = async function (productId: mongoose.Ty
     });
   }
 };
+reviewSchema.pre(/^find/, async function (next) {
+  // @ts-ignore;
+  this.where({ hidden: false });
+  next();
+});
 //When review created
 reviewSchema.post('save', async function (this: ReviewDoc) {
   const model = this.constructor as ReviewModel;
