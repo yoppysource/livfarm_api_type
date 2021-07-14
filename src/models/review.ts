@@ -119,7 +119,7 @@ reviewSchema.post('save', async function (this: ReviewDoc) {
 reviewSchema.post(/^findOneAnd/, async (document) => {
   if (document) await document.constructor.calcAverageRatings(document.product);
 });
-reviewSchema.post(/Update/, async function (doc) {
+reviewSchema.post('save', async function (doc) {
   if (doc.userIdsWhoReport.length > 0) {
     doc.hidden = true;
   }
