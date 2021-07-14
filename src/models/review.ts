@@ -123,7 +123,7 @@ reviewSchema.post('save', async function (doc) {
   if (doc.userIdsWhoReport.length > 5) {
     doc.hidden = true;
   }
-  doc.save();
+  await doc.save();
 });
 const Review = mongoose.model<ReviewDoc, ReviewModel>('Review', reviewSchema);
 
