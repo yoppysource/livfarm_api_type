@@ -93,7 +93,6 @@ inventorySchema.pre('save', function (this: InventoryDoc, next: Function) {
 });
 //Update isOnShelf
 inventorySchema.post(/Update/, async function (doc) {
-  console.log('updatedCalled!!');
   console.log(doc.inventory);
   if (doc) {
     if (!doc.inventory || doc.inventory <= 0) {

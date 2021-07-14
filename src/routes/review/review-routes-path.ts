@@ -4,6 +4,7 @@ import { restrictToAdmin } from '../../middlewares/restrict-to-admin';
 import { verifyToken } from '../../middlewares/verify-token';
 import { Review, ReviewDoc } from '../../models/review';
 import { SharedController } from '../shared-controller';
+import { reportReview } from './review-controller';
 import { ReviewPath } from './review-routes';
 import { setMyToParams } from './set-my-to-params';
 import { setProductIdAndUserId } from './set-product-id-user-id';
@@ -14,6 +15,7 @@ const router = express.Router({ mergeParams: true });
 router.route(ReviewPath.ALL).get(asyncWrapper(SharedController.getAll<ReviewDoc>(Review)));
 router.use(verifyToken);
 // user is able to request for creating review
+router.route(ReviewPath.REPORT).patch(asyncWrapper(reportReview));
 router.route(ReviewPath.ALL).post(setProductIdAndUserId, asyncWrapper(SharedController.createOne<ReviewDoc>(Review)));
 
 // user is able to delete update their review

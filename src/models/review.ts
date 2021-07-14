@@ -9,6 +9,8 @@ interface ReviewDoc extends mongoose.Document {
   product: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
   userName?: string;
+  hidden: boolean;
+  userIdsWhoReport: Array<mongoose.Types.ObjectId>;
 }
 
 interface ReviewAttrs {
@@ -46,11 +48,16 @@ const reviewSchema = new mongoose.Schema(
       ref: 'Product',
       required: [true, 'Review must belong to product.'],
     },
+    hidden: {
+      type: Boolean,
+      defalut: false,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'Review must belong to a user.'],
     },
+    userIdsWhoReport: [mongoose.Schema.Types.ObjectId],
     userName: String,
   },
   {
@@ -106,6 +113,12 @@ reviewSchema.post('save', async function (this: ReviewDoc) {
 //When review updated
 reviewSchema.post(/^findOneAnd/, async (document) => {
   if (document) await document.constructor.calcAverageRatings(document.product);
+});
+reviewSchema.post(/Update/, async function (doc) {
+  if (doc.userIdsWhoReport.length > 0) {
+    doc.hidden = true;
+  }
+  doc.save();
 });
 const Review = mongoose.model<ReviewDoc, ReviewModel>('Review', reviewSchema);
 
