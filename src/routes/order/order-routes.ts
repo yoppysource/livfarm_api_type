@@ -13,13 +13,12 @@ router.route(OrderPath.WEBHOOK).post(sendAlimTalkWhenPaid);
 
 router.use(verifyToken);
 router.route(OrderPath.MY).get(asyncWrapper(getMyOrders)).post(asyncWrapper(createMyOrder));
-
+router.route(OrderPath.ID).patch(asyncWrapper(SharedController.updateOne<OrderDoc>(Order)));
 router.use(restrictToAdmin);
 router.route(OrderPath.ALL).get(asyncWrapper(SharedController.getAll<OrderDoc>(Order)));
 router
   .route(OrderPath.ID)
   .get(asyncWrapper(SharedController.getOne<OrderDoc>(Order)))
-  .patch(asyncWrapper(SharedController.updateOne<OrderDoc>(Order)))
   .delete(asyncWrapper(SharedController.deleteOne<OrderDoc>(Order)));
 //Webhook
 export { router as orderRouter };
