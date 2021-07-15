@@ -1,7 +1,7 @@
 import { AppError } from '../errors/app-error';
 
-const aligoapi = require('aligoapi');
-const dotenv = require('dotenv');
+import aligoapi from 'aligoapi';
+import dotenv from 'dotenv';
 
 let AuthData = {
   apikey: process.env.ALIGO_API_KEY,
@@ -27,7 +27,7 @@ const sendAlimtalk = async (req, res, next) => {
   AuthData.token = data.token;
   let body;
 
-  if (!req.data.customData.option || req.data.customData.option == 'takeOut') {
+  if (req.data.customData.option && req.data.customData.option == 'takeOut') {
     body = {
       senderkey: process.env.ALIGO_SENDER_KEY,
       tpl_code: 'TE_9735',
