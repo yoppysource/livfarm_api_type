@@ -1,3 +1,5 @@
+import { AppError } from '../errors/app-error';
+
 const aligoapi = require('aligoapi');
 const dotenv = require('dotenv');
 
@@ -10,7 +12,7 @@ let AuthData = {
 // token은 토큰생성을 제외한 모든 API 호출시 필수값입니다.
 
 const kakaoTemplateCode = 'TE_2986';
-
+//@ts-ignore
 const sendAlimtalk = async (req, res, next) => {
   // 알림톡 전송
   console.log('get Auth');
@@ -47,6 +49,8 @@ const sendAlimtalk = async (req, res, next) => {
       □ 매장주소 : ${req.data.customData.storeAddress}
       □ 방문예정시각 : ${req.data.customData.bookingOrderMessage}
       □ 결제금액 : ${req.data.amount}원`,
+      //@ts-ignore
+
       recvname: '리브팜',
       receiver_3: process.env.ADMIN2_PHONE_NUMBER,
       subject_3: '주문알림',
@@ -56,6 +60,8 @@ const sendAlimtalk = async (req, res, next) => {
       □ 매장주소 : ${req.data.customData.storeAddress}
       □ 방문예정시각 : ${req.data.customData.bookingOrderMessage}
       □ 결제금액 : ${req.data.amount}원`,
+      //@ts-ignore
+
       recvname: '리브팜',
       failover: 'Y', // Y or N
       fsubject_1: '주문알림문자',
@@ -102,6 +108,8 @@ const sendAlimtalk = async (req, res, next) => {
       □ 배송지 : ${req.data.buyer_addr}
       □ 배송예정일 : ${req.data.customData.bookingOrderMessage}
       □ 결제금액 : ${req.data.amount}원`,
+      //@ts-ignore
+
       recvname: '리브팜',
       receiver_3: process.env.ADMIN2_PHONE_NUMBER,
 
@@ -112,6 +120,7 @@ const sendAlimtalk = async (req, res, next) => {
       □ 배송지 : ${req.data.buyer_addr}
       □ 배송예정일 : ${req.data.customData.bookingOrderMessage}
       □ 결제금액 : ${req.data.amount}원`,
+      //@ts-ignore
       recvname: '리브팜',
       // button: 버튼 정보 // JSON string,
       failover: 'Y', // Y or N
@@ -147,10 +156,12 @@ const sendAlimtalk = async (req, res, next) => {
   console.log(req.body);
   aligoapi
     .alimtalkSend(req, AuthData)
+    //@ts-ignore
     .then((r) => {
       console.log(r);
       res.send(r);
     })
+    //@ts-ignore
     .catch((e) => {
       console.log(e);
       res.send(e);

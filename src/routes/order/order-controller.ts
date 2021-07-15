@@ -6,7 +6,7 @@ import { Inventory } from '../../models/inventory';
 import { Order } from '../../models/order';
 import { User } from '../../models/user';
 //@ts-ignore
-import { sendAlimtalk } from '../../services/aligo_service.js';
+import { sendAlimtalk } from '../../services/aligo_service';
 
 const pointPercentage = 10;
 
