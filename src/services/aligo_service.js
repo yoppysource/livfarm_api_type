@@ -11,7 +11,7 @@ let AuthData = {
 
 const kakaoTemplateCode = 'TE_2986';
 
-exports.sendAlimtalk = async (req, res) => {
+const sendAlimtalk = async (req, res, next) => {
   // 알림톡 전송
   console.log('get Auth');
   req.body = {
@@ -25,7 +25,7 @@ exports.sendAlimtalk = async (req, res) => {
   AuthData.token = data.token;
   let body;
 
-  if (req.data.customData.option || req.data.customData.option == 'takeOut') {
+  if (!req.data.customData.option || req.data.customData.option == 'takeOut') {
     body = {
       senderkey: process.env.ALIGO_SENDER_KEY,
       tpl_code: 'TE_9735',
@@ -104,6 +104,7 @@ exports.sendAlimtalk = async (req, res) => {
       □ 결제금액 : ${req.data.amount}원`,
       recvname: '리브팜',
       receiver_3: process.env.ADMIN2_PHONE_NUMBER,
+
       subject_3: '주문알림',
       message_3: `[LivFarm] 주문완료안내
       안녕하세요, ${req.data.buyer_name}님. 리브팜에서 주문해주셔서 감사합니다. 배송 예정시간에 맞게 갓 수확한 채소를 신선하게 보내드리겠습니다.
@@ -155,3 +156,5 @@ exports.sendAlimtalk = async (req, res) => {
       res.send(e);
     });
 };
+
+export { sendAlimtalk };

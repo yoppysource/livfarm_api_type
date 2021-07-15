@@ -5,7 +5,8 @@ import { Cart } from '../../models/cart';
 import { Inventory } from '../../models/inventory';
 import { Order } from '../../models/order';
 import { User } from '../../models/user';
-const sendAlimtalk = require('../../services/aligo_service.js');
+//@ts-ignore
+import { sendAlimtalk } from '../../services/aligo_service.js';
 
 const pointPercentage = 10;
 
@@ -38,7 +39,7 @@ const getTokenFromIamPort = async () => {
       return response.data.response.access_token;
     }
   } catch (error) {
-    throw new AppError(error.response.data.message, error.response.status);
+    console.log(error.response.data.message);
   }
 };
 
@@ -54,19 +55,23 @@ const getDataFromIamPort = async (accessToken: string, merchantUID: string) => {
     });
     return response.data.response;
   } catch (error) {
-    throw new AppError(error.response.data.message, error.response.status);
+    console.log(error.response.data.message);
   }
 };
 
 const sendAlimTalkWhenPaid = async (req: Request, res: Response, next: NextFunction) => {
-  const token = await getTokenFromIamPort();
-  const data = await getDataFromIamPort(token, req.body.merchant_uid);
-  console.log(data);
-  req.data = data;
-  const customData = JSON.parse(data.custom_data);
-  console.log(customData);
-  req.data.customData = customData;
-  return sendAlimtalk(req, res);
+  try {
+    const token = await getTokenFromIamPort();
+    const data = await getDataFromIamPort(token, req.body.merchant_uid);
+    console.log(data);
+    req.data = data;
+    const customData = JSON.parse(data.custom_data);
+    console.log(customData);
+    req.data.customData = customData;
+    return sendAlimtalk(req, res, next);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const updateInventory = async (cartID: string) => {

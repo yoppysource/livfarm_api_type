@@ -8,6 +8,14 @@
     "module": "commonjs",                           /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
     // "lib": [],                                   /* Specify library files to be included in the compilation. */
     // "allowJs": true,                             /* Allow javascript files to be compiled. */
+    // "exclude": ["node_modules", "models", "js"]
+    // "outDir": "",
+    // //출력할 디렉토리를 설정합니다.
+    // //etc: js 관련 설정
+    // "checkJs": false,
+    // //allowJs: true로 js 사용시 js의 오류 검사 여부
+    // "maxNodeModuleJsDepth": 1,
+    //js파일 검색할 최대 깊이
     // "checkJs": true,                             /* Report errors in .js files. */
     // "jsx": "preserve",                           /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
     // "declaration": true,                         /* Generates corresponding '.d.ts' file. */
