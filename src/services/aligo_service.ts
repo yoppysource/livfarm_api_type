@@ -20,13 +20,13 @@ const sendAlimtalk = async (req, res, next) => {
     type: 'm',
     time: 1,
   };
+  console.log('before token');
   let data = await aligoapi.token(req, AuthData);
-  console.log(data);
+  console.log('after token');
   if (data.code != 0) return next(new AppError('Fail to get Token from Aligo', 400));
-
   AuthData.token = data.token;
   let body;
-
+  console.log('is called?');
   if (req.data.customData.option && req.data.customData.option == 'takeOut') {
     body = {
       senderkey: process.env.ALIGO_SENDER_KEY,
