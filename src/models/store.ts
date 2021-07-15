@@ -19,6 +19,12 @@ interface StoreAttrs {
   takeOut: boolean;
   location: Object;
   address: string;
+  hidden: boolean;
+  isOpenSaturday: boolean;
+  isOpenSunday: boolean;
+  isOpenToday: boolean;
+  openHourStr: string;
+  closeHourStr: string;
 }
 
 interface StoreModel extends mongoose.Model<StoreDoc> {
