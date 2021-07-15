@@ -68,7 +68,7 @@ const sendAlimTalkWhenPaid = async (req: Request, res: Response, next: NextFunct
     const customData = JSON.parse(data.custom_data);
     console.log(customData);
     req.data.customData = customData;
-    return sendAlimtalk(req, res, next);
+    await sendAlimtalk(req, res, next);
   } catch (error) {
     console.log(error);
   }
