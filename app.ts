@@ -44,7 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // // Set security HTTP headers
 app.use(helmet());
 // // Development logging
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 // // Limit requests from same IP
 const limiter = rateLimit({
   max: 100000,
