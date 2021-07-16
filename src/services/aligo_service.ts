@@ -1,7 +1,5 @@
 import { AppError } from '../errors/app-error';
-
 import aligoapi from 'aligoapi';
-import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 
 let AuthData = {
@@ -11,8 +9,6 @@ let AuthData = {
 };
 // token을 제외한 인증용 데이터는 모든 API 호출시 필수값입니다.
 // token은 토큰생성을 제외한 모든 API 호출시 필수값입니다.
-
-const kakaoTemplateCode = 'TE_2986';
 const sendAlimtalk = async (req: Request, res: Response, next: NextFunction) => {
   // 알림톡 전송
   console.log('get Auth');
