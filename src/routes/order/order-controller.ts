@@ -63,12 +63,12 @@ const sendAlimTalkWhenPaid = async (req: Request, res: Response, next: NextFunct
   try {
     const token = await getTokenFromIamPort();
     const data = await getDataFromIamPort(token, req.body.merchant_uid);
-    console.log(data);
-    req.data = data;
-    const customData = JSON.parse(data.custom_data);
-    console.log(customData);
-    req.data.customData = customData;
-    await sendAlimtalk(req, res, next);
+    // console.log(data);
+    // req.data = data;
+    // const customData = JSON.parse(data.custom_data);
+    // console.log(customData);
+    // req.data.customData = customData;
+    await sendAlimtalk(req, res);
   } catch (error) {
     console.log(error);
   }

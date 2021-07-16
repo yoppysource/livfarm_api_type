@@ -1,6 +1,8 @@
 import { AppError } from '../errors/app-error';
 import aligoapi from 'aligoapi';
-import { Request, Response, NextFunction } from 'express';
+import dotenv from 'dotenv';
+// import { Request, Response, NextFunction } from 'express';
+dotenv.config({ path: './config.env' });
 
 let AuthData = {
   apikey: process.env.ALIGO_API_KEY,
@@ -9,7 +11,8 @@ let AuthData = {
 };
 // token을 제외한 인증용 데이터는 모든 API 호출시 필수값입니다.
 // token은 토큰생성을 제외한 모든 API 호출시 필수값입니다.
-const sendAlimtalk = async (req: Request, res: Response, next: NextFunction) => {
+// @ts-ignore
+const sendAlimtalk = async (req, res) => {
   // 알림톡 전송
   console.log('get Auth');
   req.body = {
@@ -19,7 +22,7 @@ const sendAlimtalk = async (req: Request, res: Response, next: NextFunction) => 
   console.log('before token');
   let data = await aligoapi.token(req, AuthData);
   console.log('after token');
-  if (data.code != 0) return next(new AppError('Fail to get Token from Aligo', 400));
+  // if (data.code != 0) return next(new AppError('Fail to get Token from Aligo', 400));
   AuthData.token = data.token;
   let body;
   console.log('is called?');
