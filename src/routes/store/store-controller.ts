@@ -11,7 +11,8 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
   let coordinates = [];
   let zoneCode = '';
   let isPossibleToBuy = false;
-
+  const allStores = await Store.find({}).sort({ maxDistance: -1 });
+  const baseStore = allStores[allStores.length - 1];
   try {
     if (req.body.address && req.body.coordinates) {
       address = req.body.address;
@@ -54,61 +55,44 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
         }
       }
     } else {
-      let store;
-      const allStores = await Store.find({});
-      store = allStores[0];
-      await store.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
-
-      if (req.user) {
-        if (!req.user.cart.store) {
-          await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
-        } else {
-          if (req.user.cart.storeId.toString() !== store._id.toString()) {
-            await Cart.findByIdAndUpdate(req.user.cart._id, { store: store._id, $pull: { items: {} } });
-          }
-        }
+      await baseStore.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
+      if (req.user && (!req.user.cart.storeId || req.user.cart.storeId.toString() !== baseStore._id.toString())) {
+        await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: baseStore._id, $pull: { items: {} } });
       }
-
-      return res.status(200).json({ status: 'success', isPossibleToBuy: false, data: { data: store } });
+      return res.status(200).json({ status: 'success', isPossibleToBuy: false, data: { data: baseStore } });
     }
+    let nearStore;
 
-    const stores = await Store.find({
-      location: {
-        $nearSphere: {
-          $geometry: {
-            type: 'Point',
-            coordinates: [coordinates[0], coordinates[1]],
+    for await (const store of allStores) {
+      nearStore = await Store.findOne({
+        _id: store._id,
+        location: {
+          $nearSphere: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [coordinates[0], coordinates[1]],
+            },
+            $maxDistance: store.maxDistance,
           },
-          $maxDistance: 10000,
         },
-      },
-    });
-
-    let store;
-
-    if (stores && stores.length !== 0) {
-      isPossibleToBuy = true;
-      store = stores[0];
-    } else {
-      const allStores = await Store.find({});
-      store = allStores[0];
+      });
+      if (nearStore) break;
     }
 
-    await store.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
+    if (nearStore) {
+      isPossibleToBuy = true;
+    } else {
+      nearStore = baseStore;
+    }
 
-    if (req.user) {
-      if (!req.user.cart.storeId) {
-        await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
-      } else {
-        if (req.user.cart.storeId.toString() !== store._id.toString()) {
-          await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: store._id, $pull: { items: {} } });
-        }
-      }
+    await nearStore.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
+    if (req.user && (!req.user.cart.storeId || req.user.cart.storeId.toString() !== nearStore._id.toString())) {
+      await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: nearStore._id, $pull: { items: {} } });
     }
 
     if (req.user && req.user.role === 'partner') isPossibleToBuy = true;
 
-    res.status(200).json({ status: 'success', address, zoneCode, coordinates, isPossibleToBuy, data: { data: store } });
+    res.status(200).json({ status: 'success', address, zoneCode, coordinates, isPossibleToBuy, data: { data: nearStore } });
   } catch (error) {
     return next(new AppError('주소를 가져오던 중 오류가 발생했습니다. 다시 시도해주세요', 501));
   }

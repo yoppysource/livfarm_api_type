@@ -12,6 +12,7 @@ interface StoreDoc extends mongoose.Document {
   openHourStr: string;
   closeHourStr: string;
   inventories: InventoryDoc[];
+  maxDistance: number;
 }
 
 interface StoreAttrs {
@@ -25,6 +26,7 @@ interface StoreAttrs {
   isOpenToday: boolean;
   openHourStr: string;
   closeHourStr: string;
+  maxDistance: number;
 }
 
 interface StoreModel extends mongoose.Model<StoreDoc> {
@@ -75,6 +77,10 @@ const storeSchema = new mongoose.Schema<StoreDoc>(
       default: '18:00',
     },
     streamingTag: String,
+    maxDistance: {
+      type: Number,
+      default: 5000,
+    },
   },
   {
     toObject: { virtuals: true },
