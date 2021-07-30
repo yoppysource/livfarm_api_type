@@ -32,6 +32,5 @@ it('delete inventory document only for admin', async () => {
     .get(InventoryPath.withBase(InventoryPath.STORE_ID).replace(':storeId', storeId))
     .set('authorization', `Bearer ${userToken}`)
     .expect(200);
-
   expect(beforeLength + 1).toEqual(res2.body.length);
 });

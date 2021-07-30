@@ -16,7 +16,7 @@ const getMyOrders = async (req: Request, res: Response, next: NextFunction) => {
 
   res.status(200).json({
     status: 'success',
-    results: docs.length,
+    length: docs.length,
     //when sending arrary
     data: {
       data: docs,
@@ -64,6 +64,7 @@ const sendAlimTalkWhenPaid = async (req: Request, res: Response, next: NextFunct
     const token = await getTokenFromIamPort();
     const data = await getDataFromIamPort(token, req.body.merchant_uid);
     console.log(data);
+
     //@ts-ignore
     req.iamportData = data;
     const customData = JSON.parse(data.custom_data);

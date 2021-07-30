@@ -16,7 +16,7 @@ it('can change password with proper request from client', async () => {
     .set('authorization', `Bearer ${token}`)
     .send({ currentPassword: 'password', newPassword: 'newpass' })
     .expect(200);
-  await new Promise((res) => setTimeout(res, 2000));
+  await new Promise((res) => setTimeout(res, 500));
 
   await request(app).post(AuthPath.withBase(AuthPath.LOGIN)).send({ email: 'test@test.com', password: 'newpass' }).expect(200);
 });

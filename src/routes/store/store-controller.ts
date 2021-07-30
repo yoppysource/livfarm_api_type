@@ -11,7 +11,8 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
   let coordinates = [];
   let zoneCode = '';
   let isPossibleToBuy = false;
-  const allStores = await Store.find({}).sort({ maxDistance: -1 });
+  const allStores = await Store.find({}).sort({ maxDistance: 1 });
+  console.log(allStores);
   const baseStore = allStores[allStores.length - 1];
   try {
     if (req.body.address && req.body.coordinates) {
@@ -61,6 +62,14 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
       }
       return res.status(200).json({ status: 'success', isPossibleToBuy: false, data: { data: baseStore } });
     }
+    if (req.user && req.user.role === 'partner') {
+      await baseStore.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
+      if (req.user && (!req.user.cart.storeId || req.user.cart.storeId.toString() !== baseStore._id.toString())) {
+        await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: baseStore._id, $pull: { items: {} } });
+      }
+      return res.status(200).json({ status: 'success', address, zoneCode, coordinates, isPossibleToBuy: true, data: { data: baseStore } });
+    }
+
     let nearStore;
 
     for await (const store of allStores) {
@@ -90,12 +99,20 @@ const getStoreAndAddressFromLocation = async (req: Request, res: Response, next:
       await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: nearStore._id, $pull: { items: {} } });
     }
 
-    if (req.user && req.user.role === 'partner') isPossibleToBuy = true;
-
     res.status(200).json({ status: 'success', address, zoneCode, coordinates, isPossibleToBuy, data: { data: nearStore } });
   } catch (error) {
     return next(new AppError('주소를 가져오던 중 오류가 발생했습니다. 다시 시도해주세요', 501));
   }
 };
+const getInventoriesWhenUserIsInStore = async (req: Request, res: Response, next: NextFunction) => {
+  const storeId = req.params.storeId;
+  const store = await Store.findOne({ _id: storeId });
+  if (store == null) return next(new AppError('가게 정보를 가져오는데 실패했습니다', 400));
+  await store.populate({ path: 'inventories', model: Inventory, match: { hidden: { $ne: true } } }).execPopulate();
+  if (req.user && (!req.user.cart.storeId || req.user.cart.storeId.toString() !== storeId.toString())) {
+    await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: storeId, $pull: { items: {} } });
+  }
+  res.status(200).json({ status: 'success', data: { data: store } });
+};
 
-export { getStoreAndAddressFromLocation };
+export { getStoreAndAddressFromLocation, getInventoriesWhenUserIsInStore };

@@ -46,7 +46,7 @@ const orderSchema = new mongoose.Schema(
     },
     option: {
       type: String,
-      enum: ['delivery', 'takeOut'],
+      enum: ['inStore', 'delivery', 'takeOut'],
       default: 'delivery',
     },
     orderRequestMessage: String,

@@ -29,7 +29,6 @@ const randomBoolean = () => Math.random() >= 0.5;
 
 beforeAll(async () => {
   try {
-    dotenv.config({ path: './config.env' });
     mongo = new MongoMemoryServer();
     const mongoUri = await mongo.getUri();
     await mongoose.connect(mongoUri, {
@@ -47,6 +46,13 @@ beforeAll(async () => {
         location: {
           coordinates: [127.142202931285, 37.42874326246],
         },
+        isOpenSaturday: false,
+        isOpenSunday: false,
+        hidden: false,
+        isOpenToday: true,
+        openHourStr: '09:00',
+        closeHourStr: '18:00',
+        maxDistance: 1500,
       }),
     );
     const store2 = await Store.create(
@@ -57,6 +63,13 @@ beforeAll(async () => {
         location: {
           coordinates: [127.071267962717, 37.3156726620216],
         },
+        isOpenSaturday: false,
+        isOpenSunday: false,
+        hidden: false,
+        isOpenToday: true,
+        openHourStr: '09:00',
+        closeHourStr: '18:00',
+        maxDistance: 1500,
       }),
     );
 
@@ -96,8 +109,12 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await mongo.stop();
-  await mongoose.connection.close();
+  try {
+    await mongo.stop();
+    await mongoose.connection.close();
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 //Set up the global function

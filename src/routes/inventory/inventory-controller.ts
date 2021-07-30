@@ -7,7 +7,7 @@ const getInventoriesBasedOnStoreId = async (req: Request, res: Response) => {
 
   res.status(200).json({
     status: 'success',
-    results: docs.length,
+    length: docs.length,
     //when sending arrary
     data: {
       data: docs,
