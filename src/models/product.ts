@@ -9,18 +9,18 @@ interface ProductDoc extends mongoose.Document {
   slug: string;
   price: number;
   discountedPrice: number;
-  location: string;
+  //location: string;
   description: string;
-  imgPath: Array<string>;
+  // imgPath: string[];
   thumbnailPath: string;
   descriptionImgPath: string;
-  detailImgPath: string[];
+  // detailImgPath: string[];
   sku: string;
   intro: string;
-  tasteMeasure: string[];
-  storageTip: string;
+  // tasteMeasure: string[];
+  // storageTip: string;
   recipe: string;
-  nutrition: string;
+  // nutrition: string;
   weight: string;
   ratingsAverage: number;
   ratingsQuantity: number;
@@ -29,7 +29,6 @@ interface ProductDoc extends mongoose.Document {
 const productSchema = new mongoose.Schema<ProductDoc>(
   {
     category: Number,
-
     name: {
       type: String,
       required: [true, 'Product must have a name'],
@@ -51,22 +50,25 @@ const productSchema = new mongoose.Schema<ProductDoc>(
     discountedPrice: {
       type: Number,
     },
-    location: String,
+    //  location: String,
     description: String,
     thumbnailPath: String,
     descriptionImgPath: String,
-    detailImgPath: [String],
+    //detailImgPath: [String],
     sku: String,
     type: String,
     intro: String,
-    tasteMeasure: [String],
-    storageTip: {
+    // tasteMeasure: [String],
+    //  storageTip: {
+    //   type: String,
+    //   default: '밑동을 한 번에 잘라 흐르는 물에 씻어 드세요. 남으면 물기를 털어 키친 타월 등으로 감싸 냉장 보관하세요.',
+    // },
+    // recipe: String,
+    // nutrition: String,
+    weight: {
       type: String,
-      default: '밑동을 한 번에 잘라 흐르는 물에 씻어 드세요. 남으면 물기를 털어 키친 타월 등으로 감싸 냉장 보관하세요.',
+      default: '1200g',
     },
-    recipe: String,
-    nutrition: String,
-    weight: String,
     ratingsAverage: {
       type: Number,
       default: 4.5,
@@ -107,7 +109,7 @@ productSchema.virtual('reviews', {
 });
 
 productSchema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true });
+  this.slug = slugify(this.nameInEng, { lower: true });
   this.discountedPrice = this.price;
   next();
 });

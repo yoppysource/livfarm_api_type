@@ -7,7 +7,7 @@ import asyncWrapper from 'async-wrapper-express-ts';
 
 import { Store, StoreDoc } from '../../models/store';
 import { StorePath } from './store-routes';
-import { getInventoriesWhenUserIsInStore, getStoreAndAddressFromLocation } from './store-controller';
+import { getInventoriesWhenUserIsInStore, getStoreAndAddressFromLocation, getStoreListBasedOnCoordinate } from './store-controller';
 import { setCurrentUser } from '../../middlewares/set_current_user';
 
 const router = express.Router();
@@ -16,6 +16,7 @@ router.route(StorePath.ID).get(asyncWrapper(SharedController.getOne<StoreDoc>(St
 
 router.route(StorePath.INSTORE).get(setCurrentUser, asyncWrapper(getInventoriesWhenUserIsInStore));
 router.route(StorePath.FROM_LOCATION).post(setCurrentUser, asyncWrapper(getStoreAndAddressFromLocation));
+router.route(StorePath.COORDINATES).post(setCurrentUser, asyncWrapper(getStoreListBasedOnCoordinate));
 router.use(verifyToken, restrictToAdmin);
 
 router.route(StorePath.ALL).post(asyncWrapper(SharedController.createOne<StoreDoc>(Store)));

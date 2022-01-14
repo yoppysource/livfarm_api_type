@@ -3,8 +3,39 @@ import { Request, NextFunction, Response } from 'express';
 import { AppError } from '../../errors/app-error';
 import { Cart } from '../../models/cart';
 import { Inventory } from '../../models/inventory';
-import { Store } from '../../models/store';
-import { userRouter } from '../user/user-routes';
+import { Store, StoreDoc } from '../../models/store';
+
+const getStoreListBasedOnCoordinate = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body.coordinates) return next(new AppError('위치 좌표가 존재하지 않습니다.', 400));
+  const coordinates = req.body.coordinates;
+
+  const stores = await Store.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [coordinates[0], coordinates[1]],
+        },
+        distanceField: 'distance',
+        spherical: true,
+      },
+    },
+  ]);
+
+  stores.forEach((store: StoreDoc) => {
+    if (store.distance! <= store.maxDistance) {
+      store.availableForDelivery = true;
+    } else {
+      store.availableForDelivery = false;
+    }
+  });
+  const nearestStore = stores[0];
+  // 자동으로 바뀌는 기능 날렸음
+  if (req.user && !req.user.cart.storeId) {
+    await Cart.findByIdAndUpdate(req.user.cart._id, { storeId: nearestStore._id, $pull: { items: {} } });
+  }
+  return res.status(200).json({ status: 'success', data: { data: stores } });
+};
 
 const getStoreAndAddressFromLocation = async (req: Request, res: Response, next: NextFunction) => {
   let address = '';
@@ -115,4 +146,4 @@ const getInventoriesWhenUserIsInStore = async (req: Request, res: Response, next
   res.status(200).json({ status: 'success', data: { data: store } });
 };
 
-export { getStoreAndAddressFromLocation, getInventoriesWhenUserIsInStore };
+export { getStoreAndAddressFromLocation, getInventoriesWhenUserIsInStore, getStoreListBasedOnCoordinate };

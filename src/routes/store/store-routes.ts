@@ -3,6 +3,7 @@ class StorePath {
   static ID = '/:id';
   static ALL = '/';
   static FROM_LOCATION = '/fromLocation';
+  static COORDINATES = '/coordinates';
   static INSTORE = '/inStore/:storeId';
 
   static withBase(storePath: string) {

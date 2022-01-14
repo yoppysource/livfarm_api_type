@@ -1,5 +1,6 @@
 import { NextFunction } from 'express';
 import mongoose, { Query, Types } from 'mongoose';
+import { OptionGroup } from './option-group';
 import { Product, ProductDoc } from './product';
 
 interface InventoryBaseDoc extends mongoose.Document {
@@ -24,6 +25,7 @@ interface InventoryAttrs {
   inventory: number;
   rank: number;
   hidden: boolean;
+  optionGroups?: string[];
 }
 
 interface InventoryModel extends mongoose.Model<InventoryDoc> {
@@ -42,6 +44,11 @@ const inventorySchema = new mongoose.Schema<InventoryDoc>(
       ref: 'Product',
       required: [true, '인벤토리에는 어떤 상품인지 기입되어야합니다.'],
     },
+    recommended: {
+      type: Boolean,
+      default: false,
+    },
+    optionGroups: [mongoose.Schema.Types.ObjectId],
     inventory: {
       type: Number,
       default: 0,
@@ -80,7 +87,12 @@ inventorySchema.pre<Query<InventoryDoc, InventoryDoc>>(/^find/, function (this: 
   this.populate({
     path: 'product',
     model: Product,
-  }).sort('-isOnShelf rank');
+  })
+    .sort('-isOnShelf recommended rank')
+    .populate({
+      path: 'optionGroups',
+      model: OptionGroup,
+    });
   next();
 });
 inventorySchema.pre('save', function (this: InventoryDoc, next: Function) {

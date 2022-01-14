@@ -5,25 +5,26 @@ interface StoreDoc extends mongoose.Document {
   name: string;
   location: Object;
   takeOut: boolean;
+  delivery: boolean;
   hidden: boolean;
-  isOpenSaturday: boolean;
-  isOpenSunday: boolean;
+  holidays: Number[];
   isOpenToday: boolean;
   openHourStr: string;
   closeHourStr: string;
   inventories: InventoryDoc[];
   maxDistance: number;
+  distance?: number;
+  availableForDelivery?: boolean;
 }
 
 interface StoreAttrs {
   name: string;
   takeOut: boolean;
+  delivery: boolean;
   location: Object;
   address: string;
   hidden: boolean;
-  isOpenSaturday: boolean;
-  isOpenSunday: boolean;
-  isOpenToday: boolean;
+  holidays: Number[];
   openHourStr: string;
   closeHourStr: string;
   maxDistance: number;
@@ -56,13 +57,13 @@ const storeSchema = new mongoose.Schema<StoreDoc>(
       type: Boolean,
       default: false,
     },
-    isOpenSaturday: {
+    delivery: {
       type: Boolean,
-      default: false,
+      default: true,
     },
-    isOpenSunday: {
-      type: Boolean,
-      default: false,
+    holidays: {
+      type: [Number],
+      default: [],
     },
     isOpenToday: {
       type: Boolean,

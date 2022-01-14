@@ -100,7 +100,6 @@ const userSchema = new mongoose.Schema<UserDoc>(
     },
     agreeToGetMail: {
       type: Boolean,
-      default: false,
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
@@ -120,7 +119,6 @@ const userSchema = new mongoose.Schema<UserDoc>(
       enum: ['male', 'female'],
     },
     phoneNumber: String,
-    //Address might be more than one.
     addresses: [
       {
         type: {

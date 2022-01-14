@@ -1,19 +1,6 @@
-import mongoose, { Mongoose, Query } from 'mongoose';
-import { Inventory, InventoryDoc, InventoryPopulatedDoc } from './inventory';
-import { Product } from './product';
-// import { ItemDoc, ItemPopulatedDoc, Item } from './item';
-
-// interface CartBaseDoc extends mongoose.Document {
-//   getTotalPrice: (itemDocs: ItemDoc[]) => number;
-//   getTotalDiscountedPrice: (cartDocs: ItemDoc[]) => number;
-// }
-// interface CartDoc extends CartBaseDoc {
-//   items: mongoose.ObjectId[];
-// }
-
-// interface CartPopulatedDoc extends CartBaseDoc {
-//   items: ItemPopulatedDoc[];
-// }
+import mongoose from 'mongoose';
+import { Inventory, InventoryPopulatedDoc } from './inventory';
+import { OptionDoc, optionSchema } from './option-group';
 
 interface CartDoc extends mongoose.Document {
   getTotalPrice: number;
@@ -25,6 +12,7 @@ interface CartDoc extends mongoose.Document {
 interface Item {
   inventory: InventoryPopulatedDoc;
   quantity: number;
+  options: OptionDoc[];
 }
 
 const cartSchema = new mongoose.Schema<CartDoc>(
@@ -45,6 +33,7 @@ const cartSchema = new mongoose.Schema<CartDoc>(
             default: 1,
             min: [1, 'quantity must be above 1'],
           },
+          options: [optionSchema],
         },
         {
           toObject: {
@@ -96,7 +85,16 @@ cartSchema.virtual('totalPrice').get(function (this: any) {
   if (!this.items || this.items.length === 0) {
     return 0;
   }
-  return this.items.map((element: Item) => element.inventory.product.price * element.quantity).reduce((a: number, b: number) => a + b);
+  return this.items
+    .map(
+      (element: Item) =>
+        (element.inventory.product.price +
+          (element.options === undefined || element.options.length === 0
+            ? 0
+            : element.options.map((option: OptionDoc) => option.price).reduce((a: number, b: number) => a + b))) *
+        element.quantity,
+    )
+    .reduce((a: number, b: number) => a + b);
 });
 
 cartSchema.virtual('totalDiscountedPrice').get(function (this: any) {

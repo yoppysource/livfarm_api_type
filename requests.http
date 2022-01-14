@@ -1,0 +1,10 @@
+GET http://127.0.0.1:6001/api/v1/appInfo
+### 
+POST http://127.0.0.1:6001/api/v1/auth/login
+content-type: application/json
+
+{
+  "email": "admin@livfarm.com",
+  "password": "connect2020"
+}
+

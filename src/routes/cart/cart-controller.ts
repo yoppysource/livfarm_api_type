@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 import { AppError } from '../../errors/app-error';
 import { Cart, CartDoc } from '../../models/cart';
 import { Inventory } from '../../models/inventory';
+import { OptionDoc } from '../../models/option-group';
 import { Product } from '../../models/product';
 import { inventoryRouter } from '../inventory/inventory-routes';
 
@@ -31,7 +32,7 @@ const updateMyCart = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 const addItem = async (req: Request, res: Response, next: NextFunction) => {
-  const { inventory, quantity } = req.body;
+  const { inventory, quantity, options } = req.body;
 
   if (!inventory || !quantity) {
     return next(new AppError('유효하지 않은 요청입니다.', 401));
@@ -46,7 +47,7 @@ const addItem = async (req: Request, res: Response, next: NextFunction) => {
   let isDuplicated = false;
   let isShortage = false;
   cart.items.forEach((item) => {
-    if (item.inventory._id.toString() === inventory) {
+    if (item.inventory._id.toString() === inventory && arraysMatch(options, item.options)) {
       isDuplicated = true;
       item.quantity += quantity;
       if (item.quantity > item.inventory.inventory) {
@@ -60,7 +61,7 @@ const addItem = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (!isDuplicated) {
-    cart.items.push({ inventory, quantity });
+    cart.items.push({ inventory, quantity, options });
   }
 
   await cart.save();
@@ -78,6 +79,18 @@ const addItem = async (req: Request, res: Response, next: NextFunction) => {
       data: cart,
     },
   });
+};
+var arraysMatch = function (arr1: OptionDoc[], arr2: OptionDoc[]) {
+  // Check if the arrays are the same length
+  if (arr1.length !== arr2.length) return false;
+
+  // Check if all items exist and are in the same order
+  for (var i = 0; i < arr1.length; i++) {
+    if (!arr2.some((e) => e.id === arr1[i]['_id'])) return false;
+  }
+
+  // Otherwise, return true
+  return true;
 };
 
 const deleteItem = async (req: Request, res: Response, next: NextFunction) => {

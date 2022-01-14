@@ -2,6 +2,7 @@ import { UserDoc } from '../models/user';
 import pug from 'pug';
 import htmlToText from 'html-to-text';
 import nodemailer from 'nodemailer';
+import InlineCss from 'inline-css';
 
 class EmailService {
   userEmail: string;
@@ -37,11 +38,12 @@ class EmailService {
 
   async send(template: string, subject: string) {
     //1) Render HTML based on a pug template
-    const html = pug.renderFile(`${__dirname}/../../views/email/${template}.pug`, {
+    let html = pug.renderFile(`${__dirname}/../../views/email/${template}.pug`, {
       url: this.url,
       subject,
     });
 
+    html = await InlineCss(html, { url: this.url });
     //2) Define email options.
     const mailOptions = {
       from: this.from,
