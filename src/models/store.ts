@@ -77,10 +77,18 @@ const storeSchema = new mongoose.Schema<StoreDoc>(
       type: String,
       default: '18:00',
     },
+    minAmountForDelivery: {
+      type: Number,
+      default: 13000,
+    },
     streamingTag: String,
+    deliveryFee: {
+      type: Number,
+      default: 2900,
+    },
     maxDistance: {
       type: Number,
-      default: 5000,
+      default: 3000,
     },
   },
   {

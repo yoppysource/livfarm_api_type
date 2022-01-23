@@ -104,8 +104,8 @@ productSchema.index({ slug: 1 });
 //Define virtual field to populate reviews
 productSchema.virtual('reviews', {
   ref: 'Review',
-  foreignField: 'product',
   localField: '_id',
+  foreignField: 'product',
 });
 
 productSchema.pre('save', function (next) {
